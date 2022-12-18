@@ -13,4 +13,4 @@ const sequelizeConnection = new Sequelize(dbName, dbUsername, dbPassword, {
   dialect: dialect,
 });
 
-export = { sequelizeConnection };
+export default sequelizeConnection
