@@ -6,6 +6,8 @@ import RoleRoute from "./routes/RoleRoute";
 dotenv.config();
 const app = express();
 
+app.use(express.json());
+
 app.get("/", (_, res: Response) => {
   return res.status(200).json({
     message: "api ready...",
