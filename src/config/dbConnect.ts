@@ -13,4 +13,13 @@ const sequelizeConnection = new Sequelize(dbName, dbUsername, dbPassword, {
   dialect: dialect,
 });
 
-export default sequelizeConnection
+sequelizeConnection
+  .sync()
+  .then(() => {
+    console.log("database connected");
+  })
+  .catch((error) => {
+    console.log(error.message);
+  });
+
+export default sequelizeConnection;
