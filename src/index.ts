@@ -1,6 +1,8 @@
 import express, { Response } from "express";
 import dotenv from "dotenv";
 
+import RoleRoute from "./routes/RoleRoute";
+
 dotenv.config();
 const app = express();
 
@@ -9,6 +11,8 @@ app.get("/", (_, res: Response) => {
     message: "api ready...",
   });
 });
+
+app.use(RoleRoute);
 
 app.listen(process.env.APP_PORT, () => {
   console.log(
