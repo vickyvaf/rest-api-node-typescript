@@ -27,4 +27,33 @@ const getRole = async (_: any, res: Response): Promise<Response> => {
   }
 };
 
-export { getRole };
+const createRole = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { roleName, active } = req.body;
+    const result = await Role.create({
+      roleName: roleName,
+      active: active,
+    });
+
+    return res.status(200).send({
+      status: 200,
+      message: "created",
+      role: result,
+    });
+  } catch (error: any) {
+    if (error !== null && error instanceof Error) {
+      return res.status(500).send({
+        status: 500,
+        message: error.message,
+        error: error,
+      });
+    }
+    return res.status(500).send({
+      status: 500,
+      message: "Internal server error",
+      error: error,
+    });
+  }
+};
+
+export { getRole, createRole };
