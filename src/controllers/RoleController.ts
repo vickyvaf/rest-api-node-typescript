@@ -67,8 +67,8 @@ const createRole = async (req: Request, res: Response): Promise<Response> => {
       active: active,
     });
 
-    return res.status(200).send({
-      status: 200,
+    return res.status(201).send({
+      status: 201,
       message: "created",
       role: result,
     });
