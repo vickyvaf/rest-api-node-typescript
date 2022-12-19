@@ -13,6 +13,7 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.14",
+    "@types/validatorjs": "^3.15.0",
     "nodemon": "^2.0.20",
     "sequelize-cli": "^6.5.2",
     "ts-node": "^10.9.1",
