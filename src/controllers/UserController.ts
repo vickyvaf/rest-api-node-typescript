@@ -1,14 +1,16 @@
 import { Request, Response } from "express";
+import { passwordHashing } from "../helpers/PasswordHelper";
 import responseData from "../helpers/Helper";
 import User from "../db/models/User";
 
 const register = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { name, email, password, confirmPassword } = req.body;
+    const hashedPassword = await passwordHashing(password);
     const user = await User.create({
       name,
       email,
-      password,
+      password: hashedPassword,
       active: true,
       verified: true,
       roleId: 1,
