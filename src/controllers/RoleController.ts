@@ -88,4 +88,38 @@ const createRole = async (req: Request, res: Response): Promise<Response> => {
   }
 };
 
-export { getRole, getRoleById, createRole };
+const deleteRole = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { id } = req.params;
+    const result = await Role.findByPk(id);
+
+    if (!result) {
+      return res.status(404).json({
+        status: 404,
+        message: "Data not found",
+      });
+    }
+
+    await Role.destroy({ where: { id: id } });
+
+    return res.status(200).json({
+      status: 200,
+      message: "Deleted"
+    });
+  } catch (error: any) {
+    if (error !== null && error instanceof Error) {
+      return res.status(500).send({
+        status: 500,
+        message: error.message,
+        error: error,
+      });
+    }
+    return res.status(500).send({
+      status: 500,
+      message: "Internal server error",
+      error: error,
+    });
+  }
+};
+
+export { getRole, getRoleById, createRole, deleteRole };
