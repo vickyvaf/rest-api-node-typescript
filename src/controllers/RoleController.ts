@@ -88,23 +88,36 @@ const createRole = async (req: Request, res: Response): Promise<Response> => {
   }
 };
 
-const deleteRole = async (req: Request, res: Response): Promise<Response> => {
+const updateRole = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id } = req.params;
-    const result = await Role.findByPk(id);
+    const { roleName, active } = req.body;
+    const checkId = await Role.findByPk(id);
 
-    if (!result) {
+    if (!checkId) {
       return res.status(404).json({
         status: 404,
         message: "Data not found",
       });
     }
 
-    await Role.destroy({ where: { id: id } });
+    const values = {
+      roleName,
+      active,
+    };
+    const selector = {
+      where: {
+        id: id,
+      },
+    };
+    const updateStatus = await Role.update(values, selector);
+    const updateRole = await Role.findByPk(id);
 
     return res.status(200).json({
       status: 200,
-      message: "Deleted"
+      message: "Updated",
+      updateStatus: updateStatus,
+      role: updateRole,
     });
   } catch (error: any) {
     if (error !== null && error instanceof Error) {
@@ -122,4 +135,38 @@ const deleteRole = async (req: Request, res: Response): Promise<Response> => {
   }
 };
 
-export { getRole, getRoleById, createRole, deleteRole };
+const deleteRole = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { id } = req.params;
+    const result = await Role.findByPk(id);
+
+    if (!result) {
+      return res.status(404).json({
+        status: 404,
+        message: "Data not found",
+      });
+    }
+
+    await Role.destroy({ where: { id: id } });
+
+    return res.status(200).json({
+      status: 200,
+      message: "Deleted",
+    });
+  } catch (error: any) {
+    if (error !== null && error instanceof Error) {
+      return res.status(500).send({
+        status: 500,
+        message: error.message,
+        error: error,
+      });
+    }
+    return res.status(500).send({
+      status: 500,
+      message: "Internal server error",
+      error: error,
+    });
+  }
+};
+
+export { getRole, getRoleById, createRole, updateRole, deleteRole };
