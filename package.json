@@ -23,6 +23,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mysql2": "^2.3.3",
-    "sequelize": "^6.27.0"
+    "sequelize": "^6.27.0",
+    "validatorjs": "^3.22.1"
   }
 }
