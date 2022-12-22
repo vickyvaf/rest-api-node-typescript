@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { passwordHashing, passwordCompare } from "../helpers/PasswordHelper";
+import { generateToken } from "../helpers/GenerateToken";
 import responseData from "../helpers/Helper";
 import User from "../db/models/User";
 
@@ -39,7 +40,25 @@ const login = async (req: Request, res: Response): Promise<Response> => {
         .send(responseData(401, "Unauthorized", null, null));
     }
 
-    return res.status(200).send(responseData(200, "OK", null, user))
+    const dataUser = {
+      name: user.name,
+      email: user.email,
+      roleId: user.roleId,
+      active: user.active,
+      verified: user.verified,
+    };
+    const token = generateToken(dataUser);
+
+    const responseUser = {
+      name: user.name,
+      email: user.email,
+      roleId: user.roleId,
+      active: user.active,
+      verified: user.verified,
+      token: token
+    }
+
+    return res.status(200).send(responseData(200, "OK", null, responseUser));
   } catch (error: any) {
     return res.status(500).send(responseData(500, "", error, null));
   }
