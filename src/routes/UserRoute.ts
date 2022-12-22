@@ -1,6 +1,7 @@
 import express from "express";
 import { register, login } from "../controllers/UserController";
 import { registerValidation } from "../middlewares/validation/UserValidation";
+import authenticated from "../middlewares/Authorization";
 
 const route = express.Router();
 

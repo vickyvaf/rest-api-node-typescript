@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { passwordHashing, passwordCompare } from "../helpers/PasswordHelper";
-import { generateToken } from "../helpers/GenerateToken";
+import { generateToken, generateRefreshToken } from "../helpers/GenerateToken";
 import responseData from "../helpers/Helper";
 import User from "../db/models/User";
 
@@ -47,7 +47,17 @@ const login = async (req: Request, res: Response): Promise<Response> => {
       active: user.active,
       verified: user.verified,
     };
+
     const token = generateToken(dataUser);
+    const refreshToken = generateRefreshToken(dataUser);
+
+    user.accessToken = refreshToken;
+    await user.save();
+    
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
 
     const responseUser = {
       name: user.name,
@@ -55,8 +65,8 @@ const login = async (req: Request, res: Response): Promise<Response> => {
       roleId: user.roleId,
       active: user.active,
       verified: user.verified,
-      token: token
-    }
+      token: token,
+    };
 
     return res.status(200).send(responseData(200, "OK", null, responseUser));
   } catch (error: any) {
